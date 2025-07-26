@@ -1,0 +1,29 @@
+$TIPO$ -> produto, cliente
+
+
+//usuario e senha referente ao que foi colocado na instalacao do Microsoft sql server express
+1 ~ Entrar/Sair:
+* -login $USUARIO$ $SENHA$
+* -logout
+* -sair
+
+2 ~ Inserção:
+* -novo $TIPO$
+
+    diag produto | nome -> descrição -> preço(R$) -> estoque |
+    diag cliente | nome -> cidade -> rua -> numero -> (Q)Telefone -> (Q)Email |
+
+3 ~ Mostrar:
+* -exibir $TIPO$
+
+4 ~ Remover:
+* -remover $TIPO$
+
+    diag | ID
+
+5 ~ Atualizar:
+* -alterar $TIPO$
+
+    diag da a opção para alterar todas as colunas, se quiser manter o mesmo valor que ja esta, apertar ENTER
+    diag produto | ID -> valor
+    diag cliente | ID -> (se multivalorado ou NULL) -> (Q)alterar ou remover -> id -> novo valor
