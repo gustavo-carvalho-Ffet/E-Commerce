@@ -1,86 +1,59 @@
 package Cliente;
 
-import java.util.ArrayList;
-import java.util.List;
 import Entidade.Entidade;
 
-public class Cliente extends Entidade{
+public class Cliente extends Entidade {
     private String nome;
     private String email;
     private String cidade;
     private String rua;
     private int numero;
-    private final List<String> telefones;
+    private int telefone;
 
-    public Cliente(int id, String nome, String email, String cidade, String rua, int numero) {
+    public Cliente() {
+        super(-1);
+    }
+
+    public Cliente(int id, String nome, String email, String cidade, String rua, int numero, int telefone) {
         super(id);
         this.nome = nome;
         this.email = email;
         this.cidade = cidade;
         this.rua = rua;
         this.numero = numero;
-        this.telefones = new ArrayList<>();
+        this.telefone = telefone;
     }
 
-    public Cliente(String nome, String email, String cidade, String rua, int numero) {
+    public Cliente(String nome, String email, String cidade, String rua, int numero, int telefone) {
         super(-1);
         this.nome = nome;
         this.email = email;
         this.cidade = cidade;
         this.rua = rua;
         this.numero = numero;
-        this.telefones = new ArrayList<>();
+        this.telefone = telefone;
     }
 
-    public Cliente(String nome, String cidade, String rua, int numero) {
+    public Cliente(String nome, String cidade, String rua, int numero, String email, int telefone) {
         super(-1);
         this.nome = nome;
-        this.email = null;
+        this.email = email;
         this.cidade = cidade;
         this.rua = rua;
         this.numero = numero;
-        this.telefones = new ArrayList<>();
+        this.telefone = telefone;
     }
 
     @Override
-    public void exibir(){
+    public void exibir() {
         super.exibir();
         System.out.println("Nome: " + this.nome);
         System.out.println("Email: " + this.email);
-        System.out.println("Endereco: " + this.cidade + " - " + this.rua  + " - " + this.numero);
-
-        for(int i = 0; i < this.telefones.size(); i++){
-            System.out.println("Telefone " + (i+1) +" : " + this.telefones.get(i));
-        }
+        System.out.println("Endereco: " + this.cidade + " - " + this.rua + " - " + this.numero);
+        System.out.println("Telefone: " + this.telefone);
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-    public void addTelefone(String telefone) {
-        this.telefones.add(telefone);
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setTelefone(int index, String telefone) {
-        this.telefones.set(index, telefone);
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public void setRua(String rua) {
-        this.rua = rua;
-    }
-
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
-    }
-
+    // Getters
     public String getNome() {
         return nome;
     }
@@ -101,7 +74,32 @@ public class Cliente extends Entidade{
         return numero;
     }
 
-    public List<String> getTelefones() {
-        return telefones;
+    public int getTelefone() {
+        return telefone;
+    }
+
+    // Setters
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public void setNumero(int numero) {
+        this.numero = numero;
+    }
+
+    public void setTelefone(int telefone) {
+        this.telefone = telefone;
     }
 }

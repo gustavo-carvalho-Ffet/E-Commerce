@@ -94,4 +94,8 @@ public abstract class CLI {
     public static String getRua(){
         return getString(30);
     }
+
+    public static String getEmail(){
+        return getString(30);
+    }
 }

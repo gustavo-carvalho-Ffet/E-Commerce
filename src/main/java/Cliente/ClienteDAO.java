@@ -10,6 +10,8 @@ import java.util.List;
 import DAO.DAO;
 import DAO.inDAO;
 import Entidade.*;
+import Produto.Produto;
+import Util.Util;
 
 public class ClienteDAO implements inDAO {
     private final Connection connection;
@@ -29,7 +31,7 @@ public class ClienteDAO implements inDAO {
         Cliente c1 = (Cliente)e;
         PreparedStatement stmt;
 
-        String sql1 = "INSERT INTO tbCliente (CLI_NOME, CLI_EMAIL, CLI_CIDADE, CLI_RUA, CLI_NUMERO) VALUES (?, ?, ?, ?, ?)";
+        String sql1 = "INSERT INTO tbCliente (CLI_NOME, CLI_EMAIL, CLI_CIDADE, CLI_RUA, CLI_NUMERO, CLI_TELEFONE) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             stmt = this.connection.prepareStatement(sql1);
@@ -39,6 +41,7 @@ public class ClienteDAO implements inDAO {
             stmt.setString(3, c1.getCidade());
             stmt.setString(4, c1.getRua());
             stmt.setInt(5, c1.getNumero());
+            stmt.setInt(6, c1.getTelefone());
 
             int linhas = stmt.executeUpdate();
 
@@ -52,31 +55,30 @@ public class ClienteDAO implements inDAO {
 
     @Override
     public Entidade buscar(int id) {
+        if (connection == null) {
+            throw new IllegalStateException("Deve logar antes.");
+        }
+
         Cliente c1;
         PreparedStatement stmt;
         String sql1 = "SELECT * FROM tbCliente WHERE CLI_CODIGO = ?";
 
         try {
             stmt = this.connection.prepareStatement(sql1);
-
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            rs.next();
-
-            c1 = new Cliente(rs.getInt(1), rs.getString(2), rs.getString(3),
-                             rs.getString(4), rs.getString(5), rs.getInt(6)
-            );
-
-            List<String> lista = getTelefones(c1);
-
-            for (String s : lista) {
-                c1.addTelefone(s);
+            if (rs.next()) {
+                c1 = new Cliente(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getString(4), rs.getString(5), rs.getInt(6),  rs.getInt(7)
+                );
+            } else {
+                throw new IllegalArgumentException("ID de cliente não encontrado!");
             }
-
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new RuntimeException("Erro ao buscar cliente: " + ex.getMessage(), ex);
         }
+
         return c1;
     }
 
@@ -86,6 +88,9 @@ public class ClienteDAO implements inDAO {
 
     @Override
     public void remover(Entidade e) {
+        if(connection == null){
+            throw new IllegalStateException("Deve logar antes.");
+        }
         PreparedStatement stmt;
         String sql1 = "DELETE FROM tbCliente WHERE CLI_CODIGO = ?";
 
@@ -100,31 +105,29 @@ public class ClienteDAO implements inDAO {
                 System.out.println("linhas alteradas com sucesso! " + linhas);
             }
         } catch (SQLException ex) {
-            throw new RuntimeException(ex);
+            throw new IllegalArgumentException("Problema ao remover o cliente ");
         }
     }
 
     @Override
-    public void atualizar(Entidade data, Entidade dstn){
-        PreparedStatement stmt;
-        Cliente c1 = (Cliente)data;
-        String sql1 = "UPDATE tbCliente SET CLI_NOME =  ?, CLI_EMAIL = ?, CLI_CIDADE = ?," +
-                      " CLI_RUA = ?, CLI_NUMERO = ? WHERE CLI_CODIGO = ?";
+    public void atualizar(Entidade data, Entidade dstn) {
+        Cliente c1 = (Cliente) data;
+        String sql = "UPDATE tbCliente SET CLI_NOME = ?, CLI_EMAIL = ?, CLI_CIDADE = ?, " +
+                "CLI_RUA = ?, CLI_NUMERO = ?, CLI_TELEFONE = ? WHERE CLI_CODIGO = ?";
 
-        try {
-            stmt = this.connection.prepareStatement(sql1);
-
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, c1.getNome());
             stmt.setString(2, c1.getEmail());
             stmt.setString(3, c1.getCidade());
             stmt.setString(4, c1.getRua());
             stmt.setInt(5, c1.getNumero());
-            stmt.setInt(6, dstn.getId());
+            stmt.setInt(6, c1.getTelefone());
+            stmt.setInt(7, dstn.getId());
 
             int linhas = stmt.executeUpdate();
 
             if (linhas > 0) {
-                System.out.println("linhas alteradas com sucesso! " + linhas);
+                System.out.println("Cliente atualizado com sucesso! " + linhas);
             }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -132,78 +135,37 @@ public class ClienteDAO implements inDAO {
     }
 
     @Override
-    public List buscarTodos() {
-        return List.of();
-    }
+    public List<Cliente> buscarTodos() throws IllegalStateException {
+        if (connection == null) {
+            throw new IllegalStateException("Deve logar antes.");
+        }
 
-    //******************** METODOS UNICOS DA CLASSE ***************************//
-
-    public void addTelefone(Entidade e, String telefone) {
+        List<Cliente> lista = new ArrayList<>();
+        Cliente c1;
         PreparedStatement stmt;
-
-        String sql1 = "INSERT INTO tbClienteTelefone (CLT_TELEFONE, CLI_CODIGO) VALUES (?, ?)";
+        ResultSet rs;
+        String sql = "SELECT * FROM tbCliente";
 
         try {
-            stmt = this.connection.prepareStatement(sql1);
+            stmt = this.connection.prepareStatement(sql);
+            rs = stmt.executeQuery();
 
-            stmt.setString(1, telefone);
-            stmt.setInt(2, e.getId());
-
-            int linhas = stmt.executeUpdate();
-
-            if (linhas > 0) {
-                System.out.println("linhas alteradas com sucesso! " + linhas);
+            while (rs.next()) {
+                c1 = new Cliente(
+                        rs.getInt("CLI_CODIGO"),
+                        rs.getString("CLI_NOME"),
+                        rs.getString("CLI_EMAIL"),
+                        rs.getString("CLI_CIDADE"),
+                        rs.getString("CLI_RUA"),
+                        rs.getInt("CLI_NUMERO"),
+                        rs.getInt("CLI_TELEFONE")
+                );
+                lista.add(c1);
             }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    public List<String> getTelefones(Entidade e) {
-        PreparedStatement stmt;
-        List<String> telefones = new ArrayList<>();
-
-        String sql1 = "SELECT * FROM tbClienteTelefone WHERE CLI_CODIGO = ?";
-
-        try {
-            stmt = this.connection.prepareStatement(sql1);
-
-            stmt.setInt(1, e.getId());
-            ResultSet rs = stmt.executeQuery();
-
-            while(rs.next()) {
-                telefones.add(rs.getString(2));
-            }
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-        return telefones;
-    }
-
-    static class telefoneDAO implements inDAO {
-        @Override
-        public void inserir(Entidade e) {
-            
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Problema ao buscar tabela: " + e.getMessage());
         }
 
-        @Override
-        public void remover(Entidade e) {
-
-        }
-
-        @Override
-        public Entidade buscar(int id) {
-            return null;
-        }
-
-        @Override
-        public List buscarTodos() {
-            return List.of();
-        }
-
-        @Override
-        public void atualizar(Entidade scr, Entidade dst) {
-
-        }
+        return lista;
     }
 }
