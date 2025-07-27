@@ -5,8 +5,6 @@ import Tabela.*;
 import DAO.DAO;
 import Tabela.Tabela;
 import Util.Util;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProdutoCLI extends CLI{
@@ -19,7 +17,6 @@ public class ProdutoCLI extends CLI{
     public ProdutoCLI(DAO dao) {
         super(dao);
         this.tabela = new Tabela(gerarCabecalho(), 5);
-
     }
 
     @Override

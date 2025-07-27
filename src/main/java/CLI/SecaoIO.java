@@ -45,10 +45,10 @@ public class SecaoIO {
             }
             case CLIENTE -> {
                 switch (opcao.getOperacao()) {
-                    //case NOVO -> clienteCLI.novo();
-                    //case REMOVER -> clienteCLI.remover();
-                    //case ALTERAR -> clienteCLI.alterar();
-                    //case MOSTRAR -> clienteCLI.mostrar();
+                    case NOVO -> clienteCLI.novo();
+                    case REMOVER -> clienteCLI.remover();
+                    case ALTERAR -> clienteCLI.alterar();
+                    case MOSTRAR -> clienteCLI.mostrar();
                 }
             }
         }

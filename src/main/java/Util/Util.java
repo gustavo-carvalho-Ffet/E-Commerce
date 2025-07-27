@@ -19,7 +19,7 @@ public class Util {
             }
             conexao = DriverManager.getConnection(url, usuario, senha);
         } catch (SQLException e) {
-            throw new IllegalArgumentException(e.getMessage());
+            throw new IllegalArgumentException("Usuario ou senha invalido." + e);
         }
 
         System.out.println("Login efetuado com sucesso");
