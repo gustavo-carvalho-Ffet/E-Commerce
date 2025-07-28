@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class SecaoIO {
     private static final Scanner sc = new Scanner(System.in);
-    private static ClienteCLI clienteCLI;
+    private static ClienteCLI clienteCLI = new ClienteCLI(null);
     private static ProdutoCLI produtoCLI = new ProdutoCLI();
 
     public static boolean loopComandos() throws IllegalStateException, IllegalArgumentException{
