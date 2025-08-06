@@ -2,21 +2,24 @@ package CLI;
 
 import Cliente.*;
 import DAO.*;
+import Pedido.PedidoCLI;
 import Produto.*;
 
+import Tabela.Cabecalho;
 import Util.Util;
 import java.util.Scanner;
 
 public class SecaoIO {
     private static final Scanner sc = new Scanner(System.in);
-    private static ClienteCLI clienteCLI;
-    private static ProdutoCLI produtoCLI = new ProdutoCLI();
+    private static ClienteCLI clienteCLI = new ClienteCLI(null) ;
+    private static ProdutoCLI produtoCLI = new ProdutoCLI(null) ;
+    private static PedidoCLI pedidoCLI = new PedidoCLI(null) ;
 
     public static boolean loopComandos() throws IllegalStateException, IllegalArgumentException{
         System.out.print("E-Commerce : ");
         String comando = sc.nextLine();
         Opcao opcao;
-//
+
         opcao = StringManip.getOpcao(comando);
 
         String[] comandos = comando.split("\\s+");
@@ -28,6 +31,7 @@ public class SecaoIO {
                         DAO d = Util.login(comandos[1], comandos[2]);
                         clienteCLI = new ClienteCLI(d);
                         produtoCLI = new ProdutoCLI(d);
+                        pedidoCLI = new PedidoCLI(d);
                     }
                     case LOGOUT ->  Util.logout();
                     case SAIR -> {
@@ -49,6 +53,17 @@ public class SecaoIO {
                     case REMOVER -> clienteCLI.remover();
                     case ALTERAR -> clienteCLI.alterar();
                     case MOSTRAR -> clienteCLI.mostrar();
+                }
+            }
+            case PEDIDO -> {
+                switch (opcao.getOperacao()) {
+                    case NOVO -> {
+                        clienteCLI.mostrar();
+                        produtoCLI.mostrar();
+                        pedidoCLI.novo();
+                    }
+                    case MOSTRAR -> pedidoCLI.mostrar();
+
                 }
             }
         }
