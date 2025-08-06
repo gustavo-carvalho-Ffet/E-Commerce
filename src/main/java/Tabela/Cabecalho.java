@@ -19,7 +19,7 @@ public class Cabecalho {
     }
 
     void desenhar(int tamLinha){
-        System.out.println("\033[31m" );
+        System.out.print("\033[31m" );
 
         for(int i = 0; i < tamLinha; i++){
             System.out.print("-");

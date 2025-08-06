@@ -19,13 +19,13 @@ public abstract class CLI {
         this.tabela = tabela;
     }
 
-    public abstract void novo() throws SQLException;
+    public abstract void novo() ;
 
-    public abstract void remover() throws SQLException;
+    public abstract void remover();
 
-    public abstract void alterar() throws SQLException;
+    public abstract void alterar() ;
 
-    public abstract void mostrar() throws SQLException;
+    public abstract void mostrar() ;
 
     public void setTabela(Tabela tabela){
         this.tabela = tabela;
@@ -74,6 +74,18 @@ public abstract class CLI {
 
         if (ret < 0) {
             throw new IllegalArgumentException("Número negativo não é permitido.");
+        }
+
+        return ret;
+    }
+
+    public static String getStringExata(int qtd) throws IllegalArgumentException{
+        String ret = "";
+        Scanner sc = new Scanner(System.in);
+        ret = sc.nextLine();
+
+        if (ret.length() != qtd) {
+            throw new IllegalArgumentException("Mais ou menos numeros do que o permitido");
         }
 
         return ret;

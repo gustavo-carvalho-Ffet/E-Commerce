@@ -165,4 +165,63 @@ public class ProdutoDAO implements inDAO {
 
         return lista;
     }
+
+    public List<Produto> buscarNome(String nome){
+        if(connection == null){
+            throw new IllegalStateException("Deve logar antes.");
+        }
+
+        List<Produto> lista = new ArrayList<>();
+        Produto p1;
+        PreparedStatement stmt;
+        ResultSet rs;
+        String sql1 = "SELECT * FROM tbProduto WHERE PRO_NOME = ?";
+
+        try {
+            stmt = this.connection.prepareStatement(sql1);
+            stmt.setString(1, nome);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                p1 = new Produto(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getInt(5)
+                );
+                lista.add(p1);
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Problema ao buscar tabela ");
+        }
+
+        return lista;
+    }
+
+    public List<Produto> buscarPreco(int min, int max){
+        if(connection == null){
+            throw new IllegalStateException("Deve logar antes.");
+        }
+
+        List<Produto> lista = new ArrayList<>();
+        Produto p1;
+        PreparedStatement stmt;
+        ResultSet rs;
+        String sql1 = "SELECT * FROM tbProduto WHERE PRO_PRECO BETWEEN ? AND ?";
+
+        try {
+            stmt = this.connection.prepareStatement(sql1);
+            stmt.setInt(1, min);
+            stmt.setInt(2, max);
+
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                p1 = new Produto(rs.getInt(1), rs.getString(2), rs.getString(3),
+                        rs.getInt(4), rs.getInt(5)
+                );
+                lista.add(p1);
+            }
+        } catch (SQLException e) {
+            throw new IllegalArgumentException("Problema ao buscar tabela ");
+        }
+
+        return lista;
+    }
+
 }

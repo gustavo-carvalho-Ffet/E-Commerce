@@ -21,26 +21,29 @@ public class ClienteCLI extends CLI {
         }
 
         String nome, cidade, rua, email;
-        int numero, telefone;
+        int numero;
+        String telefone;
 
         try {
-            System.out.println("Digite o nome do cliente: ");
+            System.out.print("Digite o nome do cliente: ");
             nome = CLI.getNome();
 
-            System.out.println("Digite o cidade do cliente: ");
+            System.out.print("Digite o cidade do cliente: ");
             cidade = CLI.getCidade();
 
-            System.out.println("Digite a rua do cliente: ");
+            System.out.print("Digite a rua do cliente: ");
             rua = CLI.getRua();
 
-            System.out.println("Digite o numero do cliente: ");
+            System.out.print("Digite o numero do cliente: ");
             numero = CLI.getIntPositivo();
 
-            System.out.println("Digite o email do cliente: ");
+            System.out.print("Digite o email do cliente: ");
             email = CLI.getEmail();
 
-            System.out.println("Digite o telefone do cliente: ");
-            telefone = CLI.getIntPositivo();
+            System.out.print("Digite o telefone do cliente: ");
+            telefone = getStringExata(11);
+
+
 
         }catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
@@ -57,7 +60,7 @@ public class ClienteCLI extends CLI {
         if(!Util.isloged()){
             throw new IllegalStateException("Deve logar antes");
         }
-        System.out.println("Digite o ID do cliente: ");
+        System.out.print("Digite o ID do cliente: ");
         int id = CLI.getIntPositivo();
 
         dao.cliente().remover(id);
@@ -69,7 +72,7 @@ public class ClienteCLI extends CLI {
             throw new IllegalStateException("Deve logar antes");
         }
 
-        System.out.println("Digite o ID do cliente: ");
+        System.out.print("Digite o ID do cliente: ");
         int id = CLI.getIntPositivo();
 
         Cliente c1 = (Cliente) dao.cliente().buscar(id);
@@ -77,19 +80,19 @@ public class ClienteCLI extends CLI {
 
         System.out.println("Pressione Enter para manter o mesmo valor");
 
-        System.out.println("Digite o novo nome do cliente: ");
+        System.out.print("Digite o novo nome do cliente: ");
         String nome = CLI.getNome();
         c2.setNome(nome.isEmpty() ? c1.getNome() : nome);
 
-        System.out.println("Digite a nova cidade do cliente: ");
+        System.out.print("Digite a nova cidade do cliente: ");
         String cidade = CLI.getCidade();
         c2.setCidade(cidade.isEmpty() ? c1.getCidade() : cidade);
 
-        System.out.println("Digite a nova rua do cliente: ");
+        System.out.print("Digite a nova rua do cliente: ");
         String rua = CLI.getRua();
         c2.setRua(rua.isEmpty() ? c1.getRua() : rua);
 
-        System.out.println("Digite o novo número do cliente: ");
+        System.out.print("Digite o novo número do cliente: ");
         String numeroStr = CLI.getString(10);
         if (!numeroStr.isEmpty()) {
             try {
@@ -101,21 +104,13 @@ public class ClienteCLI extends CLI {
             c2.setNumero(c1.getNumero());
         }
 
-        System.out.println("Digite o novo email do cliente: ");
+        System.out.print("Digite o novo email do cliente: ");
         String email = CLI.getEmail();
         c2.setEmail(email.isEmpty() ? c1.getEmail() : email);
 
-        System.out.println("Digite o novo telefone do cliente: ");
-        String telefoneStr = CLI.getString(20);
-        if (!telefoneStr.isEmpty()) {
-            try {
-                c2.setTelefone(Integer.parseInt(telefoneStr));
-            } catch (NumberFormatException e) {
-                throw new IllegalArgumentException("Telefone inválido.");
-            }
-        } else {
-            c2.setTelefone(c1.getTelefone());
-        }
+        System.out.print("Digite o novo telefone do cliente: ");
+        String telefoneStr = CLI.getStringExata(11);
+        c2.setTelefone(telefoneStr.isEmpty() ? c1.getTelefone() : telefoneStr);
 
         dao.cliente().atualizar(c2, c1);
     }
@@ -125,6 +120,10 @@ public class ClienteCLI extends CLI {
         if(!Util.isloged()){
             throw new IllegalStateException("Deve logar antes");
         }
+        System.out.print("\033[31m" );
+        System.out.println("Cliente:");
+        System.out.print("\033[0m" );
+
         this.tabela.resetar();
         List<Cliente> lista = dao.cliente().buscarTodos();
 
@@ -137,7 +136,7 @@ public class ClienteCLI extends CLI {
             dados.add(4, cliente.getCidade());
             dados.add(5, cliente.getRua());
             dados.add(6, String.valueOf(cliente.getNumero()));
-            dados.add(7, String.valueOf(cliente.getTelefone()));
+            dados.add(7, cliente.getTelefone());
 
             this.tabela.add(dados);
         }
@@ -147,7 +146,7 @@ public class ClienteCLI extends CLI {
 
     private Cabecalho gerarCabecalho(){
         String[] aliases =  new String[]{"ID", "NOME", "EMAIL", "CIDADE", "RUA", "NUMERO", "TELEFONE"};
-        int[] espacosColunas = new int[]{3, 15, 20, 15, 15, 6, 12};
+        int[] espacosColunas = new int[]{3, 10, 10, 10, 10, 7, 5};
 
         return new Cabecalho(aliases, espacosColunas);
     }

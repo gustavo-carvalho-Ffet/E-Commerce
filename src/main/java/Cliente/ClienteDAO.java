@@ -41,20 +41,17 @@ public class ClienteDAO implements inDAO {
             stmt.setString(3, c1.getCidade());
             stmt.setString(4, c1.getRua());
             stmt.setInt(5, c1.getNumero());
-            stmt.setInt(6, c1.getTelefone());
+            stmt.setString(6, c1.getTelefone());
 
             int linhas = stmt.executeUpdate();
 
-            if (linhas > 0) {
-                System.out.println("linhas alteradas com sucesso! "+linhas);
-            }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
     }
 
     @Override
-    public Entidade buscar(int id) {
+    public Entidade buscar(int id)  throws IllegalStateException, IllegalArgumentException {
         if (connection == null) {
             throw new IllegalStateException("Deve logar antes.");
         }
@@ -70,7 +67,7 @@ public class ClienteDAO implements inDAO {
 
             if (rs.next()) {
                 c1 = new Cliente(rs.getInt(1), rs.getString(2), rs.getString(3),
-                        rs.getString(4), rs.getString(5), rs.getInt(6),  rs.getInt(7)
+                        rs.getString(4), rs.getString(5), rs.getInt(6),  rs.getString(7)
                 );
             } else {
                 throw new IllegalArgumentException("ID de cliente não encontrado!");
@@ -101,9 +98,6 @@ public class ClienteDAO implements inDAO {
 
             int linhas = stmt.executeUpdate();
 
-            if (linhas > 0) {
-                System.out.println("linhas alteradas com sucesso! " + linhas);
-            }
         } catch (SQLException ex) {
             throw new IllegalArgumentException("Problema ao remover o cliente ");
         }
@@ -121,14 +115,11 @@ public class ClienteDAO implements inDAO {
             stmt.setString(3, c1.getCidade());
             stmt.setString(4, c1.getRua());
             stmt.setInt(5, c1.getNumero());
-            stmt.setInt(6, c1.getTelefone());
+            stmt.setString(6, c1.getTelefone());
             stmt.setInt(7, dstn.getId());
 
             int linhas = stmt.executeUpdate();
 
-            if (linhas > 0) {
-                System.out.println("Cliente atualizado com sucesso! " + linhas);
-            }
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
@@ -158,7 +149,7 @@ public class ClienteDAO implements inDAO {
                         rs.getString("CLI_CIDADE"),
                         rs.getString("CLI_RUA"),
                         rs.getInt("CLI_NUMERO"),
-                        rs.getInt("CLI_TELEFONE")
+                        rs.getString("CLI_TELEFONE")
                 );
                 lista.add(c1);
             }

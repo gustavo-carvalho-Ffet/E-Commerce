@@ -54,6 +54,9 @@ public class StringManip {
                     case "cliente":
                         opcao.setTipo(enOpcao.CLIENTE);
                         break;
+                    case "pedido":
+                        opcao.setTipo(enOpcao.PEDIDO);
+                        break;
                     default:
                         throw new IllegalArgumentException("inválido!");
                 }

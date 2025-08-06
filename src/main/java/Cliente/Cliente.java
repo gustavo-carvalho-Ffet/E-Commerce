@@ -8,13 +8,13 @@ public class Cliente extends Entidade {
     private String cidade;
     private String rua;
     private int numero;
-    private int telefone;
+    private String telefone;
 
     public Cliente() {
         super(-1);
     }
 
-    public Cliente(int id, String nome, String email, String cidade, String rua, int numero, int telefone) {
+    public Cliente(int id, String nome, String email, String cidade, String rua, int numero, String telefone) {
         super(id);
         this.nome = nome;
         this.email = email;
@@ -24,7 +24,7 @@ public class Cliente extends Entidade {
         this.telefone = telefone;
     }
 
-    public Cliente(String nome, String email, String cidade, String rua, int numero, int telefone) {
+    public Cliente(String nome, String email, String cidade, String rua, int numero, String telefone) {
         super(-1);
         this.nome = nome;
         this.email = email;
@@ -34,7 +34,7 @@ public class Cliente extends Entidade {
         this.telefone = telefone;
     }
 
-    public Cliente(String nome, String cidade, String rua, int numero, String email, int telefone) {
+    public Cliente(String nome, String cidade, String rua, int numero, String email, String telefone) {
         super(-1);
         this.nome = nome;
         this.email = email;
@@ -74,7 +74,7 @@ public class Cliente extends Entidade {
         return numero;
     }
 
-    public int getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
@@ -99,7 +99,7 @@ public class Cliente extends Entidade {
         this.numero = numero;
     }
 
-    public void setTelefone(int telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 }

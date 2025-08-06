@@ -17,5 +17,6 @@ public enum enOpcao {
 
     // TIPOS CRUD
     CLIENTE,
-    PRODUTO
+    PRODUTO,
+    PEDIDO
 }
