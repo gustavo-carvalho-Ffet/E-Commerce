@@ -16,7 +16,7 @@ public class SecaoIO {
         System.out.print("E-Commerce : ");
         String comando = sc.nextLine();
         Opcao opcao;
-
+//
         opcao = StringManip.getOpcao(comando);
 
         String[] comandos = comando.split("\\s+");
