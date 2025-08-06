@@ -61,18 +61,23 @@ public class PedidoCLI extends CLI {
                     if (jaPedidos.contains(idProduto)) {
                         System.out.println("Produto ja foi pedido");
                     } else {
-                        jaPedidos.add(idProduto);
                         Produto p = (Produto) dao.produto().buscar(idProduto);
 
-                        System.out.print("Digite a quantidade de produto: ");
-                        prodQtd = CLI.getIntPositivo();
+                        if(p.getQuantidade() > 0){
+                            jaPedidos.add(idProduto);
 
-                        if (prodQtd <= 0 || prodQtd > p.getQuantidade()) {
-                            System.out.println("Quantidade invalida");
-                            jaPedidos.remove(idProduto);
-                        } else {
-                            p1.adcionarProduto(p, prodQtd);
-                            qtdjaPedidos.add(prodQtd);
+                            System.out.print("Digite a quantidade de produto: ");
+                            prodQtd = CLI.getIntPositivo();
+
+                            if (prodQtd <= 0 || prodQtd > p.getQuantidade()) {
+                                System.out.println("Quantidade invalida");
+                                jaPedidos.remove(idProduto);
+                            } else {
+                                p1.adcionarProduto(p, prodQtd);
+                                qtdjaPedidos.add(prodQtd);
+                            }
+                        }else{
+                            System.out.println("Produto sem estoque");
                         }
                     }
                 }
